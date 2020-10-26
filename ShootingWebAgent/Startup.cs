@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog.Formatting.Json;
+using ShootingWebAgent.Services;
 using ShootingWebAgent.SQLite;
 
 namespace ShootingWebAgent
@@ -31,10 +32,8 @@ namespace ShootingWebAgent
             services.AddDbContext<DataDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DataDbConnection")));
 
-            services.AddMvc(options =>
-            {
-                options.InputFormatters.RemoveType(typeof(JsonFormatter));
-            });
+            services.AddScoped<IScopedStatisticService, ScopedStatisticService>();
+            services.AddSingleton<IStatisticDataHandler, StatisticDataHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
