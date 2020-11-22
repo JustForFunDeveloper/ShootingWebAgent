@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog.Formatting.Json;
+using ShootingWebAgent.Hub;
 using ShootingWebAgent.Services;
 using ShootingWebAgent.SQLite;
 
@@ -27,6 +28,7 @@ namespace ShootingWebAgent
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddControllersWithViews();
 
             services.AddDbContext<DataDbContext>(options =>
@@ -58,6 +60,7 @@ namespace ShootingWebAgent
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<UpdateHub>("/updateHub");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

@@ -17,4 +17,21 @@
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Hub\" />
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\scss\bulma\variables.scss" />
+    <Content Remove="wwwroot\scss\materialize\variables.scss" />
+    <Content Remove="wwwroot\scss\semantic-ui\variables_table.scss" />
+    <Content Remove="wwwroot\scss\semantic-ui\variables.scss" />
+    <Content Remove="wwwroot\scss\tabulator_site.scss" />
+    <Content Remove="wwwroot\scss\tabulator_simple.scss" />
+    <Content Remove="wwwroot\scss\tabulator_modern.scss" />
+    <Content Remove="wwwroot\scss\tabulator_midnight.scss" />
+    <Content Remove="wwwroot\scss\tabulator.scss" />
+  </ItemGroup>
+
 </Project>

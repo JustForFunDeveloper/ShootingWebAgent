@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ShootingWebAgent.Common;
+using ShootingWebAgent.DataModels;
 using ShootingWebAgent.DataModels.APIModel;
 using ShootingWebAgent.Services;
 using ShootingWebAgent.SQLite;
@@ -27,12 +29,30 @@ namespace ShootingWebAgent.API
 
         // POST api/data/disag
         [HttpPost("disag")]
-        public async Task<ActionResult> Post([FromBody] DisagJson value)
+        public async Task<ActionResult> Post([FromBody] ShClientJson value)
         {
             try
             {
-                _logger.LogInformation(value.ToJsonString());
-                await _statisticService.RefreshStatistic(0, value);
+                if (!_context.Teams.Any(team => team.TeamHashId == value.TeamHashId))
+                {
+                    return Conflict(new AnswerModel()
+                    {
+                        Answer = "Invalid Hash Id"
+                    });
+                }
+                
+                if (_context.Matches.Include(m => m.Teams)
+                    .Single(m => m.Teams.Any(team => team.TeamHashId == value.TeamHashId))
+                    .MatchStatus == MatchStatus.Closed)
+                {
+                    return Conflict(new AnswerModel()
+                    {
+                        Answer = "Match is already Close",
+                        Data = MatchStatus.Closed.ToString()
+                    });
+                }
+                
+                await _statisticService.RefreshStatistic(value);
             }
             catch (Exception e)
             {

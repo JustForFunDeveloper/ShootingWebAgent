@@ -5,6 +5,6 @@ namespace ShootingWebAgent.Services
 {
     public interface IScopedStatisticService
     {
-        public Task RefreshStatistic(int gameIndex, DisagJson disagJson);
+        public Task RefreshStatistic(ShClientJson shClientJson);
     }
 }

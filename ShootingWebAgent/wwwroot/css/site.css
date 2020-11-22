@@ -69,3 +69,71 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+/* Target styles
+-------------------------------------------------- */
+.card-body {
+    padding: 0;
+}
+
+.card-header {
+    background: #303f9f;
+    color: white;
+    font-size: x-large;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.card-footer {
+    background: white;
+    color: black !important;
+    margin-top: -6px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.footer-text {
+    font-size: xx-large;
+    font-weight: bold;
+    margin-top: -5px;
+    margin-bottom: -5px;
+}
+
+.text-shots-counter {
+    font-size: small;
+}
+
+.card.card-block {
+    min-width: 348px;
+    max-width: 348px;
+}
+
+.session {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-left: 2px
+}
+
+.session.session_h1 {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-left: 0px;
+}
+
+.root {
+    max-width: 90%;
+}
+
+.root-table {
+    max-width: 90%;
+}
+
+.navigation {
+    max-width: 90%;
+    width: 90%;
+    margin-bottom: 10px;
+}
+
+div[class^="target_container_"], div[class*=" target_container_"] {
+    margin-bottom: 20px;
+}

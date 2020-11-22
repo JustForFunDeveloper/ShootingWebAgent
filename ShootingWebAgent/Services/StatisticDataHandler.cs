@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ShootingWebAgent.DataModels.InternalModels;
+using ShootingWebAgent.DataModels;
 
 namespace ShootingWebAgent.Services
 {
