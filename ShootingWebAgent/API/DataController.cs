@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,33 @@ namespace ShootingWebAgent.API
         {
             try
             {
+                if (value.TeamHashId == "12:34:56:78")
+                {
+                    if (!_context.Matches.Any())
+                    {
+                        var match = new Match()
+                        {
+                            MatchName = "MyMatchName",
+                            SessionCount = 6,
+                            ShotsPerSession = 10,
+                            MatchStatus = MatchStatus.Open,
+                            Teams = new List<Team>()
+                            {
+                                new Team()
+                                {
+                                    TeamName = "MyTeam",
+                                    TeamHashId = "12:34:56:78"
+                                }
+                            },
+                            DisagData = new List<DisagJson>(),
+                            StatisticModels = new List<StatisticModel>()
+                        };
+
+                        await _context.Matches.AddAsync(match);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                
                 if (!_context.Teams.Any(team => team.TeamHashId == value.TeamHashId))
                 {
                     return Conflict(new AnswerModel()
@@ -56,7 +84,7 @@ namespace ShootingWebAgent.API
             }
             catch (Exception e)
             {
-                _logger.LogError("api/data/disag post error", e);
+                _logger.LogError(e, "api/data/disag post error");
                 return Conflict();
             }
 

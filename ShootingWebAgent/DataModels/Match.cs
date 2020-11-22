@@ -5,7 +5,7 @@ namespace ShootingWebAgent.DataModels
     public class Match
     {
         public int MatchId { get; set; }
-        public int MatchName { get; set; }
+        public string MatchName { get; set; }
         public int SessionCount { get; set; }
         public int ShotsPerSession { get; set; }
         public MatchStatus MatchStatus { get; set; }

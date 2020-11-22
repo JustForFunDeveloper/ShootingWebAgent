@@ -99,8 +99,8 @@ namespace ShootingWebAgent.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("MatchName")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("MatchName")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("MatchStatus")
                         .HasColumnType("INTEGER");
@@ -348,6 +348,9 @@ namespace ShootingWebAgent.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("SessionCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ShotsCount")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Team")

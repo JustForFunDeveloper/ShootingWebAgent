@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using ShootingWebAgent.Common;
 using ShootingWebAgent.DataModels;
@@ -36,6 +37,7 @@ namespace ShootingWebAgent.Services
                 var disagJson = shClientJson.DisagJson;
                 var match = _context.Matches
                     .Include(m => m.Teams)
+                    .Include(m => m.DisagData)
                     .Include(m => m.StatisticModels)
                     .ThenInclude(statistics => statistics.Points)
                     .Include(m => m.StatisticModels)
@@ -54,24 +56,25 @@ namespace ShootingWebAgent.Services
                     statisticModel.Count = disagJson.Objects.First().Count;
                     statisticModel.InternalCount++;
 
-                    double average = statisticModel.DecValueSum / statisticModel.Count;
-                    statisticModel.HR = Math.Round(average, 2);
-
-                    statisticModel.DecValue = Math.Round(disagJson.Objects.First().DecValue, 2);
-                    statisticModel.DecValueSum += Math.Round(disagJson.Objects.First().DecValue, 2);
+                    statisticModel.DecValue = Math.Round(disagJson.Objects.First().DecValue, 1);
+                    statisticModel.DecValueSum += Math.Round(disagJson.Objects.First().DecValue, 1);
+                    
+                    double average = statisticModel.DecValueSum / statisticModel.InternalCount;
+                    statisticModel.HR = Math.Round(average * match.ShotsPerSession * match.SessionCount, 1);
+                    
                     statisticModel.Points.Add(new Point()
                     {
                         x = disagJson.Objects.First().X,
                         y = disagJson.Objects.First().Y
                     });
                     
-                    statisticModel.Sessions.Last().value += statisticModel.DecValue;
+                    statisticModel.Sessions.Last().value = Math.Round(statisticModel.Sessions.Last().value + statisticModel.DecValue, 1);
                     
                     if (statisticModel.Points.Count % match.ShotsPerSession == 0)
                     {
                         statisticModel.Sessions.Add(new Session()
                         {
-                            value = 0
+                            value = Math.Round(0.0, 1)
                         });
                     }
                 }
@@ -79,7 +82,7 @@ namespace ShootingWebAgent.Services
                 {
                     StatisticModel newStatisticModel = new StatisticModel()
                     {
-                        Team = match.StatisticModels.Count + 1,
+                        Team = match.Teams.IndexOf(team) + 1,
                         TeamName = team.TeamName,
                         
                         Range = disagJson.Objects.First().Range,
@@ -91,9 +94,9 @@ namespace ShootingWebAgent.Services
                         Count = disagJson.Objects.First().Count,
                         InternalCount = 1,
                         
-                        HR = Math.Round(disagJson.Objects.First().DecValue, 2) * match.ShotsPerSession * match.SessionCount,
-                        DecValue = Math.Round(disagJson.Objects.First().DecValue, 2),
-                        DecValueSum = Math.Round(disagJson.Objects.First().DecValue, 2),
+                        HR = Math.Round(disagJson.Objects.First().DecValue * match.ShotsPerSession * match.SessionCount, 1),
+                        DecValue = Math.Round(disagJson.Objects.First().DecValue, 1),
+                        DecValueSum = Math.Round(disagJson.Objects.First().DecValue, 1),
                         Points = new List<Point>()
                         {
                             new Point()
@@ -106,19 +109,20 @@ namespace ShootingWebAgent.Services
                         {
                             new Session()
                             {
-                                value = Math.Round(disagJson.Objects.First().DecValue, 2)
+                                value = Math.Round(disagJson.Objects.First().DecValue, 1)
                             }
                         },
-                        SessionCount = match.SessionCount
+                        SessionCount = match.SessionCount,
+                        ShotsCount = match.SessionCount * match.ShotsPerSession
                     };
                     match.StatisticModels.Add(newStatisticModel);
-                    await _context.SaveChangesAsync();
                 }
+                await _context.SaveChangesAsync();
                 await _hubContext.Clients.All.SendAsync("UpdateIndexPage", match.StatisticModels.ToJsonString());
             }
             catch (Exception e)
             {
-                _logger.LogError("RefreshStatistic Error!", e);
+                _logger.LogError(e,"RefreshStatistic Error!");
             }
         }
     }

@@ -44,7 +44,7 @@ namespace ShootingWebAgent.Migrations
                 {
                     MatchId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    MatchName = table.Column<int>(nullable: false),
+                    MatchName = table.Column<string>(nullable: true),
                     SessionCount = table.Column<int>(nullable: false),
                     ShotsPerSession = table.Column<int>(nullable: false),
                     MatchStatus = table.Column<int>(nullable: false)
@@ -137,6 +137,7 @@ namespace ShootingWebAgent.Migrations
                     DecValue = table.Column<double>(nullable: false),
                     DecValueSum = table.Column<double>(nullable: false),
                     SessionCount = table.Column<int>(nullable: false),
+                    ShotsCount = table.Column<int>(nullable: false),
                     MatchId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>

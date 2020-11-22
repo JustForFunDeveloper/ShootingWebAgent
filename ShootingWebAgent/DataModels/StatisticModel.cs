@@ -41,6 +41,7 @@ namespace ShootingWebAgent.DataModels
         public List<Point> Points { get; set; }
         public List<Session> Sessions { get; set; }
         public int SessionCount { get; set; }
+        public int ShotsCount { get; set; }
     }
 
     public class Point

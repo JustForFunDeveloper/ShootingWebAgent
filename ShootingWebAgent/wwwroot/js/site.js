@@ -83,9 +83,9 @@ var App = (function () {
 	var UpdateIndexPage = function (indexPageData) {
         console.log(indexPageData);
         let parsedData = JSON.parse(indexPageData);
-        //drawTargets(parsedData);
-        table.setData(indexPageData);
-        //table.addData(indexPageData);
+        drawTargets(parsedData);
+        
+        table.updateOrAddData(indexPageData);
     };
 
     connection = new signalR.HubConnectionBuilder().withUrl("/updateHub").build();
@@ -105,6 +105,7 @@ var App = (function () {
         initialSort: [             //set the initial sort order of the data
             { column: "name", dir: "asc" },
         ],
+        index: "StatisticModelId",
         columns: [                 //define the table columns
             { title: "FirstName", field: "FirstName" },
             { title: "LastName", field: "LastName" },
@@ -145,56 +146,6 @@ var App = (function () {
         });
 
         sortTeams();
-    }
-
-    function sortTeams() {
-        const root = $('.root'), container = root.children('div');
-        container.detach().sort(sortBySrtId);
-        root.append(container);
-    }
-
-    function showError(errorTitle, errorMessage) {
-        $(".modal-title").text(errorTitle);
-        $(".modal-body").text(errorMessage);
-        $("#myModal").modal('show');
-    }
-
-    function isDataCorrect(targetData) {
-	    if (!targetData.hasOwnProperty("Team"))
-            return false;
-	    if (!targetData.hasOwnProperty("TeamName"))
-            return false;
-	    if (!targetData.hasOwnProperty("Range"))
-		    return false;
-        if (!targetData.hasOwnProperty("InternalId"))
-            return false;
-        if (!targetData.hasOwnProperty("FirstName"))
-            return false;
-        if (!targetData.hasOwnProperty("LastName"))
-            return false;
-        if (!targetData.hasOwnProperty("Count"))
-            return false;
-        if (!targetData.hasOwnProperty("InternalCount"))
-            return false;
-
-        if (targetData.Count !== targetData.Count) {
-	        return false;
-        }
-
-        if (!targetData.hasOwnProperty("HR"))
-            return false;
-        if (!targetData.hasOwnProperty("DecValue"))
-            return false;
-        if (!targetData.hasOwnProperty("DecValueSum"))
-            return false;
-        if (!targetData.hasOwnProperty("Points"))
-            return false;
-        if (!targetData.hasOwnProperty("Sessions"))
-            return false;
-        if (!targetData.hasOwnProperty("SessionCount"))
-	        return false;
-
-        return true;
     }
 
     function appendTarget(targetData) {
@@ -256,7 +207,7 @@ var App = (function () {
         }
     }
 
-    let update_target = function (targetData) {
+    function update_target (targetData) {
         let lowestShot = 10;
         const target = $('.target_' + targetData.InternalId);
 
@@ -299,7 +250,7 @@ var App = (function () {
         zoomOut(zoomMap[1], target)
     }
 
-    let update_target_data = function (targetData) {
+    function update_target_data (targetData) {
         $('.text-shots-counter_' + targetData.InternalId).text(targetData.Count + "/40");
         $('.title_' + targetData.InternalId).text(targetData.Range + " | "
             + targetData.FirstName + " " + targetData.LastName);
@@ -316,17 +267,70 @@ var App = (function () {
                 $('.session_h' + iter + "_" + targetData.InternalId)
                     .attr('style', 'visibility: hidden;')
 
-            if (targetData.Session.length >= iter) {
+            if (targetData.Sessions.length >= iter) {
                 $('.session_' + iter + '_' + targetData.InternalId)
-                    .text(targetData.Session[iter - 1].value)
+                    .text(targetData.Sessions[iter - 1].value)
+                    .attr('style', '');
             } else
                 $('.session_' + iter + '_' + targetData.InternalId)
                     .attr('style', 'visibility: hidden;')
         }
     }
 
-    let zoomOut = function (zoomLevel, target) {
+    function zoomOut (zoomLevel, target) {
         target.attr("transform", "matrix(" + zoomLevel + ",0,0," + zoomLevel + ",0,0)")
+    }
+
+    function sortTeams() {
+        const root = $('.root'), container = root.children('div');
+        container.detach().sort(sortBySrtId);
+        root.append(container);
+    }
+
+    function showError(errorTitle, errorMessage) {
+        $(".modal-title").text(errorTitle);
+        $(".modal-body").text(errorMessage);
+        $("#myModal").modal('show');
+    }
+
+    function isDataCorrect(targetData) {
+        if (!targetData.hasOwnProperty("Team"))
+            return false;
+        if (!targetData.hasOwnProperty("TeamName"))
+            return false;
+        if (!targetData.hasOwnProperty("Range"))
+            return false;
+        if (!targetData.hasOwnProperty("InternalId"))
+            return false;
+        if (!targetData.hasOwnProperty("FirstName"))
+            return false;
+        if (!targetData.hasOwnProperty("LastName"))
+            return false;
+        if (!targetData.hasOwnProperty("Count"))
+            return false;
+        if (!targetData.hasOwnProperty("InternalCount"))
+            return false;
+
+        if (targetData.Count !== targetData.Count) {
+            return false;
+        }
+
+        if (!targetData.hasOwnProperty("HR"))
+            return false;
+        if (!targetData.hasOwnProperty("DecValue"))
+            return false;
+        if (!targetData.hasOwnProperty("DecValueSum"))
+            return false;
+        if (!targetData.hasOwnProperty("Points"))
+            return false;
+        if (!targetData.hasOwnProperty("Sessions"))
+            return false;
+        if (!targetData.hasOwnProperty("SessionCount"))
+            return false;
+        if (!targetData.hasOwnProperty("ShotsCount"))
+            return false;
+
+        return true;
     }
 
     function sortBySrtId(a, b) {

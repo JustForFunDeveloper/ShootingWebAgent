@@ -169,13 +169,13 @@ var target = '<div class="card card-block d-flex">\n' +
     '            <div class="col"></div>\n' +
     '        </div>\n' +
     '        <div class="row footer-text" style="padding-bottom: 10px">\n' +
-    '            <div class="col text-left" style="padding-left: 0">\n' +
+    '            <div class="col text-left" style="padding: 0">\n' +
     '                <div class="current_shot_">x</div>\n' +
     '            </div>\n' +
-    '            <div class="col text-center">\n' +
+    '            <div class="col text-center" style="padding: 0; margin-left: -10px">\n' +
     '                <div class="current_sum_">x</div>\n' +
     '            </div>\n' +
-    '            <div class="col text-right" style="padding-right: 0">\n' +
+    '            <div class="col text-right" style="padding: 0">\n' +
     '                <div style="display: inline-block; font-size: xx-small">HR</div>\n' +
     '                <div style="display: inline-block">\n' +
     '                    <div class="current_hr_">x</div>\n' +
@@ -191,22 +191,22 @@ var target = '<div class="card card-block d-flex">\n' +
     '            <div class="col session session_h6 text-center">S6</div>\n' +
     '        </div>\n' +
     '        <div class="row">\n' +
-    '            <div class="col text-center">\n' +
+    '            <div class="col text-center" style="max-width: 53.96px; font-size: small; padding-left: 8px; padding-right: 0">' +
     '                <div class="session_1_">x</div>\n' +
     '            </div>\n' +
-    '            <div class="col text-center">\n' +
+    '            <div class="col text-center" style="max-width: 53.96px; font-size: small; padding-left: 8px; padding-right: 0">\n' +
     '                <div class="session_2_">x</div>\n' +
     '            </div>\n' +
-    '            <div class="col text-center">\n' +
+    '            <div class="col text-center" style="max-width: 53.96px; font-size: small; padding-left: 8px; padding-right: 0">\n' +
     '                <div class="session_3_">x</div>\n' +
     '            </div>\n' +
-    '            <div class="col text-center">\n' +
+    '            <div class="col text-center" style="max-width: 53.96px; font-size: small; padding-left: 8px; padding-right: 0">\n' +
     '                <div class="session_4_">x</div>\n' +
     '            </div>\n' +
-    '            <div class="col text-center">\n' +
+    '            <div class="col text-center" style="max-width: 53.96px; font-size: small; padding-left: 8px; padding-right: 0">\n' +
     '                <div class="session_5_">x</div>\n' +
     '            </div>\n' +
-    '            <div class="col text-center">\n' +
+    '            <div class="col text-center" style="max-width: 53.96px; font-size: small; padding-left: 8px; padding-right: 0">\n' +
     '                <div class="session_6_">x</div>\n' +
     '            </div>\n' +
     '        </div>\n' +
