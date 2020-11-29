@@ -34,39 +34,35 @@ namespace ShootingWebAgent.API
         {
             try
             {
-                if (value.TeamHashId == "12:34:56:78")
+                if (!_context.Matches.Any())
                 {
-                    if (!_context.Matches.Any())
+                    var match = new Match()
                     {
-                        var match = new Match()
-                        {
-                            MatchName = "MyMatchName",
-                            SessionCount = 6,
-                            ShotsPerSession = 10,
-                            MatchStatus = MatchStatus.Open,
-                            Teams = new List<Team>()
-                            {
-                                new Team()
-                                {
-                                    TeamName = "MyTeam",
-                                    TeamHashId = "12:34:56:78"
-                                }
-                            },
-                            DisagData = new List<DisagJson>(),
-                            StatisticModels = new List<StatisticModel>()
-                        };
+                        MatchName = "MyMatchName",
+                        SessionCount = 4,
+                        ShotsPerSession = 10,
+                        MatchStatus = MatchStatus.Open,
+                        Teams = new List<Team>(),
+                        DisagData = new List<DisagJson>(),
+                        StatisticModels = new List<StatisticModel>()
+                    };
 
-                        await _context.Matches.AddAsync(match);
-                        await _context.SaveChangesAsync();
-                    }
+                    await _context.Matches.AddAsync(match);
+                    await _context.SaveChangesAsync();
                 }
-                
+
                 if (!_context.Teams.Any(team => team.TeamHashId == value.TeamHashId))
                 {
-                    return Conflict(new AnswerModel()
+                    _context.Matches.Include(m => m.Teams).First().Teams.Add(new Team()
                     {
-                        Answer = "Invalid Hash Id"
+                        TeamName = value.DisagJson.Objects[0].Shooter.Club.Name,
+                        TeamHashId = value.TeamHashId
                     });
+                    await _context.SaveChangesAsync();
+                    //return Conflict(new AnswerModel()
+                    //{
+                    //    Answer = "Invalid Hash Id"
+                    //});
                 }
                 
                 if (_context.Matches.Include(m => m.Teams)

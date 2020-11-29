@@ -61,7 +61,11 @@ namespace ShootingWebAgent.Services
                     
                     double average = statisticModel.DecValueSum / statisticModel.InternalCount;
                     statisticModel.HR = Math.Round(average * match.ShotsPerSession * match.SessionCount, 1);
-                    
+
+                    if (statisticModel.Points.Count % match.ShotsPerSession == 0)
+                    {
+                        statisticModel.Points.Clear();
+                    }
                     statisticModel.Points.Add(new Point()
                     {
                         x = disagJson.Objects.First().X,

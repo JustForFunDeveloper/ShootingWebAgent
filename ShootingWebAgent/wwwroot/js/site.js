@@ -78,7 +78,8 @@ function setNavActive(id) {
 var App = (function () {
 
 	let zoomMap = { 10: 0.17, 9: 0.11, 8: 0.09, 7: 0.07, 6: 0.06, 5: 0.05, 4: 0.04, 3: 0.04, 2: 0.04, 1: 0.04 };
-	let colorMap = { 1: "red", 2: "green", 3: "yellow" };
+	let colorMap = { 1: "red", 2: "green", 3: "yellow", 4: "navy", 5: "#c27e00", 6: "#00c2c2", 7: "#c200c2", 8: "#ff2e96", 9: "#c0955d", 10: "#8f8f8f" };
+	let shotsColorMap = {10: "red", 9: "yellow", 8: "green", 7: "lightgreen", 6: "lightgreen", 5: "lightgreen", 4: "lightgreen", 3: "lightgreen", 2: "lightgreen", 1: "lightgreen", 0: "lightgreen" }
 
 	var UpdateIndexPage = function (indexPageData) {
         console.log(indexPageData);
@@ -102,18 +103,18 @@ var App = (function () {
         paginationSize: 7,         //allow 7 rows per page of data
         movableColumns: true,      //allow column order to be changed
         resizableRows: true,       //allow row order to be changed
+        groupBy: "TeamName",
         initialSort: [             //set the initial sort order of the data
-            { column: "name", dir: "asc" },
+            { column: "Range", dir: "asc" },
         ],
         index: "StatisticModelId",
         columns: [                 //define the table columns
-            { title: "FirstName", field: "FirstName" },
-            { title: "LastName", field: "LastName" },
-            { title: "Count", field: "Count" },
-            { title: "InternalCount", field: "InternalCount" },
-            { title: "DecValue", field: "DecValue" },
-            { title: "DecValueSum", field: "DecValueSum" },
-            { title: "InternalId", field: "InternalId" },
+            { title: "Stand", field: "Range" },
+            { title: "Vorname", field: "FirstName" },
+            { title: "Nachname", field: "LastName" },
+            { title: "Schüsse", field: "Count" },
+            { title: "Summe", field: "DecValueSum"},
+            { title: "HR", field: "HR" },
         ],
     });
 
@@ -230,7 +231,7 @@ var App = (function () {
                 if (targetData.hasOwnProperty("InternalId"))
                     t.setAttribute("class", 'circle_' + targetData.InternalId);
                 if (counter >= targetData.Points.length) {
-                    t.setAttribute("fill", "rgba(0, 128, 0, 0.9)");
+                    t.setAttribute("fill", shotsColorMap[Math.floor(targetData.DecValue)]);
                 } else {
                     t.setAttribute("fill", "rgba(128,128,128,0.75)");
                 }
@@ -251,7 +252,7 @@ var App = (function () {
     }
 
     function update_target_data (targetData) {
-        $('.text-shots-counter_' + targetData.InternalId).text(targetData.Count + "/40");
+        $('.text-shots-counter_' + targetData.InternalId).text(targetData.Count + "/" + targetData.ShotsCount);
         $('.title_' + targetData.InternalId).text(targetData.Range + " | "
             + targetData.FirstName + " " + targetData.LastName);
         $('.current_shot_' + targetData.InternalId).text(targetData.DecValue);
