@@ -1,0 +1,52 @@
+﻿@model ShootingWebAgent.DataModels.Match
+
+@{
+    ViewData["Title"] = "Match";
+}
+
+<h1>
+    Match:
+    @if (Model != null)
+    {
+        @Model.MatchName
+    }
+</h1>
+
+<div class="text-center">
+    <div class="navigation container-fluid">
+        <div data-sid=-1 class="container">
+            <div class="row justify-content-md-center" style="margin-bottom: 20px">
+                <div class="col col-lg-3 text-center">
+                    <button type="button" class="btn btn-danger" onclick='return check()'>All data</button>
+                </div>
+                <div class="col col-lg-2 text-center">
+                    <button type="button" class="btn btn-dark" onclick='return check_one()'>One Data</button>
+                </div>
+            </div>
+        </div>
+        <div data-sid=0 class="row">
+            <ul class="nav nav-tabs" style="width: 100%">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" onclick='return showFirst()'>Ziele</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick='return showSecond()'>Tabelle</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="root container-fluid" id="root">
+
+    </div>
+    <div class="root-table container-fluid" id="root-table">
+        <div id="example-table" class=" thead-dark"></div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script type="text/javascript" src="~/dist/js/tabulator.min.js"></script>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/data.js" asp-append-version="true"></script>

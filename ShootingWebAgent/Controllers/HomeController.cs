@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ShootingWebAgent.Models;
 using ShootingWebAgent.Services;
@@ -22,12 +24,29 @@ namespace ShootingWebAgent.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(_context.Matches.Include(m => m. Teams).ToList());
         }
 
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public IActionResult Match(int matchId)
+        {
+            _logger.LogDebug($"MatchId: {matchId}");
+
+            if (_context.Matches.Count() > 0)
+            {
+                return View(_context.Matches.Single(m => m.MatchId.Equals(matchId)));
+            }
+
+            return View();
+        }
+        
+        public IActionResult GoToMatch(int? id)
+        {
+            return LocalRedirect($"/Home/Match?matchId={id}");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
