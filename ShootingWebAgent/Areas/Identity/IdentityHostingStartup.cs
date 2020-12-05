@@ -21,6 +21,7 @@ namespace ShootingWebAgent.Areas.Identity
                         context.Configuration.GetConnectionString("IdentityContextConnection")));
 
                 services.AddDefaultIdentity<ShootingWebAgentUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<IdentityContext>();
             });
         }

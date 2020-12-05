@@ -9,8 +9,8 @@ using ShootingWebAgent.Data;
 namespace ShootingWebAgent.Migrations.Identity
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20201205080340_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20201205121607_AddRoleManager")]
+    partial class AddRoleManager
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

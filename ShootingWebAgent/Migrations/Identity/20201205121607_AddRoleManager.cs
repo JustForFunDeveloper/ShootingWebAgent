@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ShootingWebAgent.Migrations.Identity
 {
-    public partial class InitialMigration : Migration
+    public partial class AddRoleManager : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

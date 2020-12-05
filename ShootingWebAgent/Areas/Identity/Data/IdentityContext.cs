@@ -9,7 +9,7 @@ using ShootingWebAgent.Areas.Identity.Data;
 
 namespace ShootingWebAgent.Data
 {
-    public class IdentityContext : IdentityDbContext<ShootingWebAgentUser>
+    public class IdentityContext : IdentityDbContext<ShootingWebAgentUser, IdentityRole, string>
     {
         public IdentityContext(DbContextOptions<IdentityContext> options)
             : base(options)

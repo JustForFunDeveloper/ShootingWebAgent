@@ -22,6 +22,8 @@ namespace ShootingWebAgent.Controllers
             _context = context;
         }
 
+        #region Views
+
         public IActionResult Index()
         {
             return View(_context.Matches.Include(m => m. Teams).ToList());
@@ -43,11 +45,17 @@ namespace ShootingWebAgent.Controllers
 
             return View();
         }
-        
+
+        #endregion
+
+        #region Actions
+
         public IActionResult GoToMatch(int? id)
         {
             return LocalRedirect($"/Home/Match?matchId={id}");
         }
+
+        #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
