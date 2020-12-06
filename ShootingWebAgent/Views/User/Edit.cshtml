@@ -1,18 +1,73 @@
-﻿@model TModel
+﻿@model ShootingWebAgent.Controllers.UserController.EditModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
+<h1 class="h1 text-primary">Edit</h1>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+<h4 class="h4">User: @Model.Email</h4>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.Email"></label>
+                <input asp-for="@Model.Email" class="form-control"/>
+                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.OldPassword"></label>
+                <input asp-for="@Model.OldPassword" class="form-control"/>
+                <span asp-validation-for="@Model.OldPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Password"></label>
+                <input asp-for="@Model.Password" class="form-control"/>
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.ConfirmPassword"></label>
+                <input asp-for="@Model.ConfirmPassword" class="form-control"/>
+                <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.LockoutEnabled"></label>
+                <input asp-for="@Model.LockoutEnabled" class="form-control" style="width: 30px; padding: 12px"/>
+                <span asp-validation-for="@Model.LockoutEnabled" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.EmailConfirmed"></label>
+                <input asp-for="@Model.EmailConfirmed" class="form-control" style="width: 30px; padding: 12px"/>
+                <span asp-validation-for="@Model.EmailConfirmed" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.IsAdministrator"></label>
+                <input asp-for="@Model.IsAdministrator" class="form-control" style="width: 30px; padding: 12px"/>
+                <span asp-validation-for="@Model.IsAdministrator" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.IsPremiumUser"></label>
+                <input asp-for="@Model.IsPremiumUser" class="form-control" style="width: 30px; padding: 12px"/>
+                <span asp-validation-for="@Model.IsPremiumUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.IsTrialUser"></label>
+                <input asp-for="@Model.IsTrialUser" class="form-control" style="width: 30px; padding: 12px"/>
+                <span asp-validation-for="@Model.IsTrialUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary"/>
+                <a asp-action="Index" style="text-decoration: none">
+                    <button type="button" class="btn btn-dark">Back to List</button>
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
-</body>
-</html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

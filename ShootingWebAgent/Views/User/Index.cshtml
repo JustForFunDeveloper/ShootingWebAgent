@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShootingWebAgent.Areas.Identity.Data.ShootingWebAgentUser>
+﻿@model IEnumerable<ShootingWebAgent.Controllers.UserController.InputModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -8,21 +8,15 @@
 <h1 class="h1 text-primary">User Table</h1>
 <h4 class="h4">Saved User: @Model.Count()</h4>
 <p>
-    <a asp-action="Create">
+    <a asp-action="Create" style="text-decoration: none">
         <button class="btn btn-dark">Create New</button>
     </a>
 </p>
-<table class="table table-striped table-hover table-responsive-sm">
-    <thead class="thead-light">
+<table class="table table-hover table-responsive-sm">
+    <thead>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Id)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EmailConfirmed)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.LockoutEnabled)
@@ -30,9 +24,18 @@
         <th>
             @Html.DisplayNameFor(model => model.LockoutEnd)
         </th>
-        @* <th> *@
-        @*     @Html.DisplayNameFor(model => model.TrialEnd) *@
-        @* </th> *@
+        <th>
+            @Html.DisplayNameFor(model => model.EmailConfirmed)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsAdministrator)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsPremiumUser)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsTrialUser)
+        </th>
         <th></th>
     </tr>
     </thead>
@@ -41,13 +44,7 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailConfirmed)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LockoutEnabled)
@@ -55,17 +52,26 @@
             <td>
                 @Html.DisplayFor(modelItem => item.LockoutEnd)
             </td>
-            @* <td> *@
-            @*     @Html.DisplayFor(modelItem => item.TrialEnd) *@
-            @* </td> *@
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">
+                @Html.DisplayFor(modelItem => item.EmailConfirmed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAdministrator)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPremiumUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsTrialUser)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" style="text-decoration: none">
                     <button class="btn btn-primary">Edit</button>
                 </a>
-                <a asp-action="Details" asp-route-id="@item.Id">
+                <a asp-action="Details" asp-route-id="@item.Id" style="text-decoration: none">
                     <button class="btn btn-dark">Details</button>
                 </a>
-                <a asp-action="Delete" asp-route-id="@item.Id">
+                <a asp-action="Delete" asp-route-id="@item.Id" style="text-decoration: none">
                     <button class="btn btn-danger">Delete</button>
                 </a>
             </td>

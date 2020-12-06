@@ -1,39 +1,63 @@
-﻿@using Microsoft.AspNetCore.Identity
-@model ShootingWebAgent.Areas.Identity.Pages.Account.RegisterModel
-@inject RoleManager<IdentityRole> RoleManager
+﻿@model ShootingWebAgent.Controllers.UserController.InputModel
+
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Create User";
 }
 
 <div class="container">
     <div class="row justify-content-md-center">
         <div class="col-md-4">
             <h1>@ViewData["Title"]</h1>
-            <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <form asp-action="Create">
                 <h4>Create a new account.</h4>
                 <hr/>
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Input.Email"></label>
-                    <input asp-for="Input.Email" class="form-control"/>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    <label asp-for="@Model.Email"></label>
+                    <input asp-for="@Model.Email" class="form-control"/>
+                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.Password"></label>
-                    <input asp-for="Input.Password" class="form-control"/>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    <label asp-for="@Model.Password"></label>
+                    <input asp-for="@Model.Password" class="form-control"/>
+                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.ConfirmPassword"></label>
-                    <input asp-for="Input.ConfirmPassword" class="form-control"/>
-                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    <label asp-for="@Model.ConfirmPassword"></label>
+                    <input asp-for="@Model.ConfirmPassword" class="form-control"/>
+                    <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.IsAdministrator"></label>
-                    <input asp-for="Input.IsAdministrator" class="form-control" style="width: 30px; padding: 12px"/>
-                    <span asp-validation-for="Input.IsAdministrator" class="text-danger"></span>
+                    <label asp-for="@Model.LockoutEnabled"></label>
+                    <input asp-for="@Model.LockoutEnabled" class="form-control" style="width: 30px; padding: 12px"/>
+                    <span asp-validation-for="@Model.LockoutEnabled" class="text-danger"></span>
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <div class="form-group">
+                    <label asp-for="@Model.EmailConfirmed"></label>
+                    <input asp-for="@Model.EmailConfirmed" class="form-control" style="width: 30px; padding: 12px"/>
+                    <span asp-validation-for="@Model.EmailConfirmed" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.IsAdministrator"></label>
+                    <input asp-for="@Model.IsAdministrator" class="form-control" style="width: 30px; padding: 12px"/>
+                    <span asp-validation-for="@Model.IsAdministrator" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.IsPremiumUser"></label>
+                    <input asp-for="@Model.IsPremiumUser" class="form-control" style="width: 30px; padding: 12px"/>
+                    <span asp-validation-for="@Model.IsPremiumUser" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.IsTrialUser"></label>
+                    <input asp-for="@Model.IsTrialUser" class="form-control" style="width: 30px; padding: 12px"/>
+                    <span asp-validation-for="@Model.IsTrialUser" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary"/>
+                    <a asp-action="Index" style="text-decoration: none">
+                        <button type="button" class="btn btn-dark">Back to List</button>
+                    </a>
+                </div>
             </form>
         </div>
     </div>

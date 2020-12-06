@@ -1,0 +1,66 @@
+﻿@model ShootingWebAgent.Controllers.UserController.InputModel
+
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="h1 text-primary">Details</h1>
+
+<div>
+    <h4 class="h4">User: @Model.Email</h4>
+    <hr/>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LockoutEnabled)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LockoutEnabled)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LockoutEnd)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LockoutEnd)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EmailConfirmed)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EmailConfirmed)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsAdministrator)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsAdministrator)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsPremiumUser)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsPremiumUser)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsTrialUser)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsTrialUser)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" style="text-decoration: none">
+        <button class="btn btn-primary">Edit</button>
+    </a>
+    <a asp-action="Index" style="text-decoration: none">
+        <button class="btn btn-dark">Back to List</button>
+    </a>
+</div>

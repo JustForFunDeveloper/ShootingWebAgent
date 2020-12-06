@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using ShootingWebAgent.Areas.Identity.Data
 @inject SignInManager<ShootingWebAgentUser> SignInManager
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,9 +37,12 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole(Roles.Administrator.ToString()))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
