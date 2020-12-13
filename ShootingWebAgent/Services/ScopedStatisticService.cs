@@ -18,16 +18,18 @@ namespace ShootingWebAgent.Services
     {
         private readonly DataDbContext _context;
         private readonly ILogger<ScopedStatisticService> _logger;
-        private readonly IStatisticDataHandler _dataHandler;
+        private readonly IDataSingleton _dataHandler;
         private readonly IHubContext<UpdateHub> _hubContext;
+        private readonly IDataSingleton _dataSingleton;
 
         public ScopedStatisticService(DataDbContext context, ILogger<ScopedStatisticService> logger,
-            IStatisticDataHandler dataHandler, IHubContext<UpdateHub> hubContext)
+            IDataSingleton dataHandler, IHubContext<UpdateHub> hubContext, IDataSingleton dataSingleton)
         {
             _context = context;
             _logger = logger;
             _dataHandler = dataHandler;
             _hubContext = hubContext;
+            _dataSingleton = dataSingleton;
         }
 
         public async Task RefreshStatistic(ShClientJson shClientJson)
@@ -122,7 +124,10 @@ namespace ShootingWebAgent.Services
                     match.StatisticModels.Add(newStatisticModel);
                 }
                 await _context.SaveChangesAsync();
-                await _hubContext.Clients.All.SendAsync("UpdateIndexPage", match.StatisticModels.ToJsonString());
+
+                await _hubContext.Clients
+                    .Groups(match.MatchId.ToString())
+                    .SendAsync("UpdateIndexPage", match.StatisticModels.ToJsonString());
             }
             catch (Exception e)
             {

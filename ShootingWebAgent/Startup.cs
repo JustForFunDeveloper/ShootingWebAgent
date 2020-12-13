@@ -33,7 +33,7 @@ namespace ShootingWebAgent
                 options.UseSqlite(Configuration.GetConnectionString("DataDbConnection")));
 
             services.AddScoped<IScopedStatisticService, ScopedStatisticService>();
-            services.AddSingleton<IStatisticDataHandler, StatisticDataHandler>();
+            services.AddSingleton<IDataSingleton, DataSingleton>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

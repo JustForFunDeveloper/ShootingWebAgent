@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using ShootingWebAgent.Areas.Identity.Data;
+using ShootingWebAgent.Hub;
 
 namespace ShootingWebAgent.Controllers
 {
@@ -15,6 +16,7 @@ namespace ShootingWebAgent.Controllers
     {
         private readonly UserManager<ShootingWebAgentUser> _userManager;
         private readonly ILogger<UserController> _logger;
+        private readonly IHubContext<UpdateHub> _hubContext;
 
         public class InputModel
         {
@@ -82,10 +84,11 @@ namespace ShootingWebAgent.Controllers
             public new string ConfirmPassword { get; set; }
         }
 
-        public UserController(UserManager<ShootingWebAgentUser> userManager, ILogger<UserController> logger)
+        public UserController(UserManager<ShootingWebAgentUser> userManager, ILogger<UserController> logger, IHubContext<UpdateHub> hubContext)
         {
             _userManager = userManager;
             _logger = logger;
+            _hubContext = hubContext;
         }
 
         // GET: UserController
@@ -151,7 +154,7 @@ namespace ShootingWebAgent.Controllers
                 else
                 {
                     _logger.LogError($"Couldn't create user {user.Id}");
-                    return Redirect("~/Home/Error");
+                    // return Redirect("~/Home/Error");
                 }
                 
                 IdentityResult addRoleResult;
@@ -308,29 +311,6 @@ namespace ShootingWebAgent.Controllers
             catch
             {
                 return View(editModel);
-            }
-        }
-
-        // GET: UserController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return null;
-            // return View();
-        }
-
-        // POST: UserController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return null;
-                // return View();
             }
         }
 

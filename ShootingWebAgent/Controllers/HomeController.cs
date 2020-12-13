@@ -12,13 +12,13 @@ namespace ShootingWebAgent.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IStatisticDataHandler _statisticDataHandler;
+        private readonly IDataSingleton _dataSingleton;
         private readonly DataDbContext _context;
         
-        public HomeController(ILogger<HomeController> logger, IStatisticDataHandler statisticDataHandler, DataDbContext context)
+        public HomeController(ILogger<HomeController> logger, IDataSingleton dataSingleton, DataDbContext context)
         {
             _logger = logger;
-            _statisticDataHandler = statisticDataHandler;
+            _dataSingleton = dataSingleton;
             _context = context;
         }
 

@@ -71,11 +71,15 @@
                 <a asp-action="Details" asp-route-id="@item.Id" style="text-decoration: none">
                     <button class="btn btn-dark">Details</button>
                 </a>
-                <a asp-action="Delete" asp-route-id="@item.Id" style="text-decoration: none">
-                    <button class="btn btn-danger">Delete</button>
-                </a>
+                <button class="btn btn-danger" onclick="return deleteAccount('@item.Id')">Delete</button>
             </td>
         </tr>
     }
     </tbody>
 </table>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+
+<script src="~/js/users.js" asp-append-version="true"></script>

@@ -60,12 +60,12 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="errorModalTitle">Modal title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="errorModalBody">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -74,11 +74,35 @@
     </div>
 </div>
 
+@if (SignInManager.IsSignedIn(User) && User.IsInRole(Roles.Administrator.ToString()))
+{
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="deleteModalBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="showError('test','test')">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="return confirmedDelete()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 <footer class="border-top footer text-muted">
     <div class="container-fluid">
         &copy; 2020 - ShootingWebAgent - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </div>
 </footer>
+
+<script src="~/js/layout.js" asp-append-version="true"></script>
 
 @RenderSection("Scripts", required: false)
 </body>

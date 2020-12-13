@@ -1,58 +1,5 @@
-﻿const data3 =
-    '[' +
-    '{' +
-    '"Team":4,"TeamName":"SV B Team","FirstName":"Andreas","LastName":"Tappler","Count":1,"HR":104,"Range":1,"InternalCount":1,"DecValue":1,"DecValueSum":10.7,"InternalId":"1","SessionCount":4,' +
-    '"Points":[{"x":0,"y":0},{"x":-100,"y":-100},{"x":-100,"y":-10},{"x":1000,"y":0}],' +
-    '"Session":[{"value":10},{"value":20},{"value":30},{"value":40}]' +
-    '},' +
-    '{' +
-    '"Team":4,"TeamName":"SV B Team","FirstName":"Franz","LastName":"Tappler","Count":5,"HR":114,"Range":2,"InternalCount":1,"DecValue":12,"DecValueSum":11.7,"InternalId":"2","SessionCount":4,' +
-    '"Points":[{"x":0,"y":0}, {"x":-300,"y":100},{"x":0,"y":0}],' +
-    '"Session":[{"value":40}]' +
-    '},' +
-    '{' +
-    '"Team":4,"TeamName":"SV B Team","FirstName":"Franz","LastName":"dsadsas","Count":10,"HR":224,"Range":1,"InternalCount":1,"DecValue":13,"DecValueSum":12.7,"InternalId":"3","SessionCount":4,' +
-    '"Points":[{"x":0,"y":0},{"x":-300,"y":100},{"x":0,"y":0}],' +
-    '"Session":[{"value":55},{"value":22}]' +
-    '},' +
-    '{' +
-    '"Team":4,"TeamName":"SV B Team","FirstName":"Noah","LastName":"Tappler","Count":12,"HR":404,"Range":2,"InternalCount":1,"DecValue":14,"DecValueSum":13.7,"InternalId":"4","SessionCount":4,' +
-    '"Points":[{"x":0,"y":0}, {"x":-300,"y":100}, {"x":0,"y":0}],' +
-    '"Session":[]' +
-    '},' +
-    '{' +
-    '"Team":4,"TeamName":"SV B Team","FirstName":"Kerstin","LastName":"Kollegger","Count":13,"HR":204,"Range":3,"InternalCount":1,"DecValue":15,"DecValueSum":14.7,"InternalId":"5","SessionCount":4,' +
-    '"Points":[{"x":0,"y":0}, {"x":100,"y":100},{"x":10,"y":10},{"x":-1000,"y":900}],' +
-    '"Session":[{"value":100},{"value":200},{"value":300},{"value":400}]' +
-    '}' +
-    ']';
-
-const dataRefresh =
-    '[' +
-    '{' +
-    '"Team":3,"TeamName":"SV X Team","FirstName":"Andreas","LastName":"Tappler","Count":16,"HR":304,"Range":1,"InternalCount":1,"DecValue":5,"DecValueSum":8.7,"InternalId":"11","SessionCount":4,' +
-    '"Points":[{"x":0,"y":0}],' +
-    '"Session":[{"value":100},{"value":200},{"value":300},{"value":400}]' +
-    '},' +
-    '{' +
-    '"Team":3,"TeamName":"SV X Team","FirstName":"Kerstin","LastName":"Kollegger","Count":5,"HR":114,"Range":3,"InternalCount":1,"DecValue":12,"DecValueSum":11.7,"InternalId":"15","SessionCount":4,' +
-    '"Points":[],' +
-    '"Session":[{"value":40}]' +
-    '}' +
-    ']';
-
-var connection;
+﻿var connection;
 var table;
-
-function check() {
-    let parsedData = JSON.parse(data3);
-    drawTargets(parsedData);
-}
-
-function check_one() {
-    let parsedData = JSON.parse(dataRefresh);
-    drawTargets(parsedData);
-}
 
 function showSecond() {
     setNavActive(1);
@@ -82,7 +29,8 @@ var App = (function () {
 	let shotsColorMap = {10: "red", 9: "yellow", 8: "green", 7: "lightgreen", 6: "lightgreen", 5: "lightgreen", 4: "lightgreen", 3: "lightgreen", 2: "lightgreen", 1: "lightgreen", 0: "lightgreen" }
 
 	var UpdateIndexPage = function (indexPageData) {
-        console.log(indexPageData);
+        
+        
         let parsedData = JSON.parse(indexPageData);
         drawTargets(parsedData);
         
@@ -119,11 +67,14 @@ var App = (function () {
     });
 
     connection.start().then(() => {
-	    initElements();
+        var url_string = window.location;
+        var url = new URL(window.location);
+        var parameter = url.searchParams.get("matchId");
+	    initElements(parameter);
     });
 
-    function initElements() {
-        connection.invoke("InitData").catch(function (err) {
+    function initElements(matchId) {
+        connection.invoke("InitData", matchId).catch(function (err) {
             return showError("Error","Can't establish connection to the server!");
         });
         showFirst();
@@ -286,12 +237,6 @@ var App = (function () {
         const root = $('.root'), container = root.children('div');
         container.detach().sort(sortBySrtId);
         root.append(container);
-    }
-
-    function showError(errorTitle, errorMessage) {
-        $(".modal-title").text(errorTitle);
-        $(".modal-body").text(errorMessage);
-        $("#myModal").modal('show');
     }
 
     function isDataCorrect(targetData) {
