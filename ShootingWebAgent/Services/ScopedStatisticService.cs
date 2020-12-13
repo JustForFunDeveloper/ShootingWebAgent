@@ -18,18 +18,14 @@ namespace ShootingWebAgent.Services
     {
         private readonly DataDbContext _context;
         private readonly ILogger<ScopedStatisticService> _logger;
-        private readonly IDataSingleton _dataHandler;
         private readonly IHubContext<UpdateHub> _hubContext;
-        private readonly IDataSingleton _dataSingleton;
 
         public ScopedStatisticService(DataDbContext context, ILogger<ScopedStatisticService> logger,
-            IDataSingleton dataHandler, IHubContext<UpdateHub> hubContext, IDataSingleton dataSingleton)
+            IHubContext<UpdateHub> hubContext)
         {
             _context = context;
             _logger = logger;
-            _dataHandler = dataHandler;
             _hubContext = hubContext;
-            _dataSingleton = dataSingleton;
         }
 
         public async Task RefreshStatistic(ShClientJson shClientJson)
@@ -45,9 +41,9 @@ namespace ShootingWebAgent.Services
                     .Include(m => m.StatisticModels)
                     .ThenInclude(statistics => statistics.Sessions)
                     .Single(m => m.Teams.Any(t => t.TeamHashId == shClientJson.TeamHashId));
-                
+
                 match.DisagData.Add(shClientJson.DisagJson);
-                
+
                 Team team = match.Teams.Single(t => t.TeamHashId == shClientJson.TeamHashId);
 
                 var statisticModel = match.StatisticModels.SingleOrDefault(model =>
@@ -60,7 +56,7 @@ namespace ShootingWebAgent.Services
 
                     statisticModel.DecValue = Math.Round(disagJson.Objects.First().DecValue, 1);
                     statisticModel.DecValueSum += Math.Round(disagJson.Objects.First().DecValue, 1);
-                    
+
                     double average = statisticModel.DecValueSum / statisticModel.InternalCount;
                     statisticModel.HR = Math.Round(average * match.ShotsPerSession * match.SessionCount, 1);
 
@@ -68,14 +64,16 @@ namespace ShootingWebAgent.Services
                     {
                         statisticModel.Points.Clear();
                     }
+
                     statisticModel.Points.Add(new Point()
                     {
                         x = disagJson.Objects.First().X,
                         y = disagJson.Objects.First().Y
                     });
-                    
-                    statisticModel.Sessions.Last().value = Math.Round(statisticModel.Sessions.Last().value + statisticModel.DecValue, 1);
-                    
+
+                    statisticModel.Sessions.Last().value =
+                        Math.Round(statisticModel.Sessions.Last().value + statisticModel.DecValue, 1);
+
                     if (statisticModel.Points.Count % match.ShotsPerSession == 0)
                     {
                         statisticModel.Sessions.Add(new Session()
@@ -90,17 +88,18 @@ namespace ShootingWebAgent.Services
                     {
                         Team = match.Teams.IndexOf(team) + 1,
                         TeamName = team.TeamName,
-                        
+
                         Range = disagJson.Objects.First().Range,
-                        
+
                         InternalId = disagJson.Objects.First().Shooter.InternalID,
                         FirstName = disagJson.Objects.First().Shooter.Firstname,
                         LastName = disagJson.Objects.First().Shooter.Lastname,
-                        
+
                         Count = disagJson.Objects.First().Count,
                         InternalCount = 1,
-                        
-                        HR = Math.Round(disagJson.Objects.First().DecValue * match.ShotsPerSession * match.SessionCount, 1),
+
+                        HR = Math.Round(disagJson.Objects.First().DecValue * match.ShotsPerSession * match.SessionCount,
+                            1),
                         DecValue = Math.Round(disagJson.Objects.First().DecValue, 1),
                         DecValueSum = Math.Round(disagJson.Objects.First().DecValue, 1),
                         Points = new List<Point>()
@@ -123,6 +122,7 @@ namespace ShootingWebAgent.Services
                     };
                     match.StatisticModels.Add(newStatisticModel);
                 }
+
                 await _context.SaveChangesAsync();
 
                 await _hubContext.Clients
@@ -131,7 +131,7 @@ namespace ShootingWebAgent.Services
             }
             catch (Exception e)
             {
-                _logger.LogError(e,"RefreshStatistic Error!");
+                _logger.LogError(e, "RefreshStatistic Error!");
             }
         }
     }

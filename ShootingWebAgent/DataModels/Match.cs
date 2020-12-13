@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ShootingWebAgent.DataModels
 {
@@ -9,6 +10,8 @@ namespace ShootingWebAgent.DataModels
         public int SessionCount { get; set; }
         public int ShotsPerSession { get; set; }
         public MatchStatus MatchStatus { get; set; }
+        
+        public DateTime CreationDate { get; set; }
         public ICollection<Team> Teams { get; set; }
         public ICollection<DisagJson> DisagData { get; set; }
         public ICollection<StatisticModel> StatisticModels { get; set; }

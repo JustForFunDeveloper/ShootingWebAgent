@@ -40,7 +40,9 @@ namespace ShootingWebAgent.Areas.Identity.Pages.Account.Manage
         [TempData]
         public string StatusMessage { get; set; }
 
+#pragma warning disable 1998
         public async Task<IActionResult> OnGet()
+#pragma warning restore 1998
         {
             // var user = await _userManager.GetUserAsync(User);
             // if (user == null)

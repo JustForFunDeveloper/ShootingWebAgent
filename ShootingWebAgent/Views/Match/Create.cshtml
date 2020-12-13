@@ -1,0 +1,66 @@
+﻿@model ShootingWebAgent.Controllers.MatchController.MatchInputModel
+
+@{
+    ViewData["Title"] = "Create Match";
+}
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-4">
+            <h1>@ViewData["Title"]</h1>
+            <form asp-action="Create" id="form">
+                <h4>Create a new account.</h4>
+                <hr/>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="@Model.MatchName"></label>
+                    <input asp-for="@Model.MatchName" class="form-control"/>
+                    <span asp-validation-for="@Model.MatchName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.SessionCount"></label>
+                    <input asp-for="@Model.SessionCount" class="form-control"/>
+                    <span asp-validation-for="@Model.SessionCount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.ShotsPerSession"></label>
+                    <input asp-for="@Model.ShotsPerSession" class="form-control"/>
+                    <span asp-validation-for="@Model.ShotsPerSession" class="text-danger"></span>
+                </div>
+                <div id="teamInputsContainer">
+                    @Html.EditorFor(model => model.TeamInputs)
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <input class="btn btn-primary" type="button" id="btnAdd" value="Add Team"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary"/>
+                    <a asp-action="Index" style="text-decoration: none">
+                        <button type="button" class="btn btn-dark">Back to List</button>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $("#btnAdd").on('click', function () {
+            $.ajax({
+                async: true,
+                data: $('#form').serialize(),
+                type: "POST",
+                url: '/Match/AddOrderItem',
+                success: function (partialView) {
+                    console.log("partialView: "+partialView);
+                    $('#teamInputsContainer').html(partialView);
+                }
+            });
+        });
+    </script>
+}

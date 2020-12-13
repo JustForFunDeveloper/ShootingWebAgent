@@ -70,7 +70,7 @@ namespace ShootingWebAgent.Controllers
                 MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Old Password")]
-            public new string OldPassword { get; set; }
+            public string OldPassword { get; set; }
             
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
                 MinimumLength = 6)]
@@ -225,7 +225,7 @@ namespace ShootingWebAgent.Controllers
                         await _userManager.ChangePasswordAsync(user, editModel.OldPassword, editModel.Password);
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     ModelState.AddModelError("Password", "Couldn't change Password!");
                     throw;

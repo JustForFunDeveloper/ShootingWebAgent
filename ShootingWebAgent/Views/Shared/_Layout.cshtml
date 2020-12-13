@@ -25,15 +25,15 @@
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                 <partial name="_LoginPartial"/>
                 <ul class="navbar-nav flex-grow-1">
-@*                     @if (SignInManager.IsSignedIn(User)) *@
-@*                     { *@
-@*                         <li class="nav-item"> *@
-@*                             <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">Users</a> *@
-@*                         </li> *@
-@*                         <li class="nav-item"> *@
-@*                             <a class="nav-link" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a> *@
-@*                         </li> *@
-@*                     } *@
+                    @*                     @if (SignInManager.IsSignedIn(User)) *@
+                    @*                     { *@
+                    @*                         <li class="nav-item"> *@
+                    @*                             <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">Users</a> *@
+                    @*                         </li> *@
+                    @*                         <li class="nav-item"> *@
+                    @*                             <a class="nav-link" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a> *@
+                    @*                         </li> *@
+                    @*                     } *@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
@@ -41,6 +41,12 @@
                     {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                        </li>
+                    }
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole(Roles.PremiumUser.ToString()))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Match" asp-action="Index">Match</a>
                         </li>
                     }
                 </ul>

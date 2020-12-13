@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using ShootingWebAgent.Common;
+using ShootingWebAgent.Data;
 using ShootingWebAgent.SQLite;
 
 namespace ShootingWebAgent
@@ -15,6 +16,7 @@ namespace ShootingWebAgent
             CreateHostBuilder(args)
                 .Build()
                 .UpdateDataDatabase<DataDbContext>()
+                .UpdateDataDatabase<IdentityContext>()
                 .Run();
         }
 
