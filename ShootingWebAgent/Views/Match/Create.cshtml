@@ -6,10 +6,9 @@
 
 <div class="container">
     <div class="row justify-content-md-center">
-        <div class="col-md-4">
+        <div class="col-md-8">
             <h1>@ViewData["Title"]</h1>
             <form asp-action="Create" id="form">
-                <h4>Create a new account.</h4>
                 <hr/>
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
@@ -30,16 +29,14 @@
                 <div id="teamInputsContainer">
                     @Html.EditorFor(model => model.TeamInputs)
                 </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <input class="btn btn-primary" type="button" id="btnAdd" value="Add Team"/>
-                    </div>
-                </div>
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-primary"/>
                     <a asp-action="Index" style="text-decoration: none">
                         <button type="button" class="btn btn-dark">Back to List</button>
                     </a>
+                    |
+                    <input class="btn btn-success btnAdd" type="button" onclick="btnAdd()" value="Add Team"/>
+                    <input class="btn btn-warning btnDelete" type="button" onclick="btnDelete()" value="Delete Team"/>
                 </div>
             </form>
         </div>
@@ -47,20 +44,35 @@
 </div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+function btnAdd() {
+    $.ajax({
+        async: true,
+        data: $('#form').serialize(),
+        type: "POST",
+        cache: false,
+        url: '/Match/AddTeam/' + $('.counter').length,
+        success: function (partialView) {
+            $('#teamInputsContainer').html(partialView);
+        }
+    });
+}
+
+function btnDelete() {
+    $.ajax({
+        async: true,
+        data: $('#form').serialize(),
+        type: "POST",
+        cache: false,
+        url: '/Match/DeleteTeam/',
+        success: function (partialView) {
+            $('#teamInputsContainer').html(partialView);
+        }
+    });
+}
+</script>
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script type="text/javascript">
-        $("#btnAdd").on('click', function () {
-            $.ajax({
-                async: true,
-                data: $('#form').serialize(),
-                type: "POST",
-                url: '/Match/AddOrderItem',
-                success: function (partialView) {
-                    console.log("partialView: "+partialView);
-                    $('#teamInputsContainer').html(partialView);
-                }
-            });
-        });
-    </script>
+    <partial name="_ValidationScriptsPartial"/>
 }

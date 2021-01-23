@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -43,6 +47,36 @@ namespace ShootingWebAgent.Common
         public static T ToJsonObject<T>(this string value)
         {
             return JsonConvert.DeserializeObject<T>(value);
+        }
+
+        /// <summary>
+        /// Creates a md5Hash from the given string.
+        /// If the string is null it will generate a basic random string itself.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetMd5Hash(this string value)
+        {
+            Random random = new Random();
+            string text;
+            if (value == null)
+            {
+                const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                text = new string(Enumerable.Repeat(chars, 10)
+                    .Select(s => s[random.Next(s.Length)]).ToArray());
+                text += DateTime.UtcNow.Millisecond;
+            }
+            else
+            {
+                text = value + DateTime.UtcNow.Millisecond;
+            }
+            
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] textToHash = Encoding.Default.GetBytes(text);
+            byte[] result = md5.ComputeHash(textToHash);
+            Thread.Sleep(1);
+
+            return BitConverter.ToString(result); 
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ShootingWebAgent.Areas.Identity.Data;
+using ShootingWebAgent.Common;
 using ShootingWebAgent.Data;
 using ShootingWebAgent.DataModels;
 using ShootingWebAgent.SQLite;
@@ -20,7 +20,7 @@ namespace ShootingWebAgent.Controllers
         private readonly IdentityContext _identityContext;
         private readonly UserManager<ShootingWebAgentUser> _userManager;
         private readonly ILogger<UserController> _logger;
-        
+
         public class MatchInputModel : Match
         {
             [Required]
@@ -41,10 +41,17 @@ namespace ShootingWebAgent.Controllers
 
             public MatchInputModel()
             {
-                TeamInputs = new List<TeamInput>()
-                {
-                    new TeamInput()
-                };
+                TeamInputs = new List<TeamInput>();
+            }
+
+            public void AddTeamInputs()
+            {
+                TeamInputs?.Add(new TeamInput());
+            }
+
+            public void DeleteTeamInputs()
+            {
+                TeamInputs?.RemoveAt(0);
             }
         }
 
@@ -81,8 +88,11 @@ namespace ShootingWebAgent.Controllers
         {
             if (!User.Identity.IsAuthenticated || !User.IsInRole(Roles.PremiumUser.ToString()))
                 return Redirect("~/Home");
+
+            var match = new MatchInputModel();
+            match.AddTeamInputs();
             
-            return View();
+            return View(match);
         }
 
         [HttpPost]
@@ -90,8 +100,47 @@ namespace ShootingWebAgent.Controllers
         public async Task<IActionResult> Create([Bind("MatchName,SessionCount,ShotsPerSession,TeamInputs")]
             MatchInputModel match)
         {
+            if (!User.Identity.IsAuthenticated || !User.IsInRole(Roles.PremiumUser.ToString()))
+                return Redirect("~/Home");
+
             if (ModelState.IsValid)
             {
+                var newMatch = new Match()
+                {
+                    MatchName = match.MatchName,
+                    SessionCount = match.SessionCount,
+                    ShotsPerSession = match.ShotsPerSession,
+                    MatchStatus = MatchStatus.Open,
+                    Teams = new List<Team>(),
+                    DisagData = new List<DisagJson>(),
+                    StatisticModels = new List<StatisticModel>()
+                };
+                
+                foreach (var teamInput in match.TeamInputs)
+                {
+                    newMatch.Teams.Add(new Team()
+                    {
+                        TeamName = teamInput.TeamName,
+                        TeamHashId = teamInput.TeamName.GetMd5Hash()
+                    });
+                }
+                
+                await _context.Matches.AddAsync(newMatch);
+                await _context.SaveChangesAsync();
+                
+                var user = _userManager.GetUserAsync(HttpContext.User).Result;
+
+                var matchIds = _identityContext.Users
+                    .Include(i => i.MatchIds)
+                    .Single(u => u.Id.Equals(user.Id)).MatchIds;
+                
+                matchIds.Add(new UserMatches()
+                {
+                    MatchId = newMatch.MatchId
+                });
+
+                await _identityContext.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
 
@@ -115,10 +164,19 @@ namespace ShootingWebAgent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddOrderItem([Bind("TeamInputs")] MatchInputModel match)
+        public async Task<ActionResult> AddTeam([Bind("TeamInputs")] MatchInputModel match)
         {
-            match.TeamInputs.Add(new TeamInput());
+            match.AddTeamInputs();
             return PartialView("TeamInputs", match);
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteTeam([Bind("TeamInputs")] MatchInputModel match)
+        {
+            match.DeleteTeamInputs();
+            // return PartialView("TeamInputs", match);
+            return Ok();
         }
 
         #endregion

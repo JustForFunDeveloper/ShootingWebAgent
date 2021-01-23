@@ -14,6 +14,11 @@
       "provider": "cdnjs",
       "library": "twitter-bootstrap@4.5.3",
       "destination": "wwwroot/lib/twitter-bootstrap/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "Chart.js@2.9.4",
+      "destination": "wwwroot/lib/chartjs/"
     }
   ]
 }
