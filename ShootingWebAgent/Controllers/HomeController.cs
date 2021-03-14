@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,9 @@ namespace ShootingWebAgent.Controllers
 
         public IActionResult Index()
         {
-            return View(_context.Matches.Include(m => m. Teams).ToList());
+            var matches = _context.Matches.Include(m => m.Teams).ToList();
+            matches.Sort((m1, m2) => m2.MatchId.CompareTo(m1.MatchId));
+            return View(matches);
         }
 
         public IActionResult Privacy()

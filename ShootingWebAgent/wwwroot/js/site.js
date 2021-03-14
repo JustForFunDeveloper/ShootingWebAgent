@@ -48,7 +48,7 @@ var App = (function () {
         addRowPos: "top",          //when adding a new row, add it to the top of the table
         history: true,             //allow undo and redo actions on the table
         pagination: "local",       //paginate the data
-        paginationSize: 7,         //allow 7 rows per page of data
+        paginationSize: 14,         //allow 20 rows per page of data
         movableColumns: true,      //allow column order to be changed
         resizableRows: true,       //allow row order to be changed
         groupBy: "TeamName",
@@ -64,6 +64,14 @@ var App = (function () {
             { title: "Summe", field: "DecValueSum"},
             { title: "HR", field: "HR" },
         ],
+        groupHeader:function(value, count, data, group){
+            //value - the value all members of this group share
+            //count - the number of rows in this group
+            //data - an array of all the row data objects in this group
+            //group - the group component for the group
+
+            return value + "<span style='color:#d00; margin-left:10px;'>(" + count + " Personen)</span>";
+        },
     });
 
     connection.start().then(() => {
